@@ -11,10 +11,10 @@ jobs:
     steps:
     - uses: actions/checkout@v4
 
-    - name: set up JDK 21
+    - name: set up JDK 17
       uses: actions/setup-java@v4
       with:
-        java-version: '21'
+        java-version: '17'
         distribution: 'temurin'
         cache: 'gradle'
 
@@ -23,7 +23,11 @@ jobs:
 
     - uses: gradle/actions/setup-gradle@v3
 
-    - run: gradle assembleRelease
+    - name: Make Gradle wrapper executable
+      run: chmod +x ./gradlew
+
+    - name: Build (use project Gradle wrapper)
+      run: ./gradlew assembleFdroidRelease --no-daemon --stacktrace --info
 
     - name: Sign app APK
       id: sign_app
